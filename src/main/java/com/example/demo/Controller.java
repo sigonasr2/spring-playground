@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.websocket.server.PathParam;
 
 @RestController
 public class Controller {
@@ -42,6 +44,20 @@ public class Controller {
 		    	System.out.println("Failed to connect, moving on...");
 		    }
 	  }
+	
+	@GetMapping("/math/volume/{l}/{w}/{h}")
+	public String volumeDisplay(
+			@PathVariable(value="l") String length,
+			@PathVariable(value="w") String width,
+			@PathVariable(value="h") String height) {
+		return new StringBuilder("The volume of a ")
+				.append(length).append("x")
+				.append(width).append("x")
+				.append(height)
+				.append(" rectangle is ")
+				.append(Integer.parseInt(length)*Integer.parseInt(width)*Integer.parseInt(height))
+				.toString();
+	}
 	
 	@GetMapping("/math/calculate")
 	public String piDisplay(@RequestParam(value="operation",required=false) String operation,
