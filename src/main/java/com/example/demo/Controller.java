@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,6 +15,7 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -41,6 +43,37 @@ public class Controller {
 		    }
 	  }
 	
+	@GetMapping("/math/calculate")
+	public String piDisplay(@RequestParam(value="operation",required=false) String operation,
+			@RequestParam(value="x") String x,
+			@RequestParam(value="y") String y) {
+		int val1=Integer.parseInt(x);
+		int val2=Integer.parseInt(y);
+		switch (operation) {
+			case "subtract":{
+				return Integer.toString(val1-val2);
+			}
+			case "multiply":{
+				return Integer.toString(val1*val2);
+			}
+			case "divide":{
+				return Integer.toString(val1/val2);
+			}
+			default:{
+				return Integer.toString(val1+val2);
+			}
+		}
+	}
+	
+	@PostMapping("/math/sum")
+	public String sumDisplay(@RequestParam Map<String,String> keys) {
+		int sum = 0;
+		for (String i : keys.keySet()) {
+			sum += Integer.parseInt(keys.get(i));
+		}
+		return Integer.toString(sum);
+	}
+	
 	@GetMapping("/math/pi")
 	public String piDisplay() {
 		return Double.toString(Math.PI);
@@ -56,5 +89,4 @@ public class Controller {
 		}
 		return null;
     }
-
 }
