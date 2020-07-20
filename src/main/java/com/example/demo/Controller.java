@@ -45,6 +45,38 @@ public class Controller {
 		    }
 	  }
 	
+	public double CalculateArea(double width,double height) {
+		return width*height;
+	}
+	
+	public double CalculateArea(double radius) {
+		return Math.PI*Math.pow(radius, 2);
+	}
+
+	@PostMapping("/math/area")
+	public String areaDisplay(
+			@RequestParam Map<String,String> map) {
+		if (map.containsKey("type")) {
+			if (map.get("type").equalsIgnoreCase("circle")) {
+				if (map.containsKey("radius")) {
+					return new StringBuilder("Area of a circle with a radius of ")
+						.append(map.get("radius"))
+						.append(" is "+CalculateArea(Double.parseDouble(map.get("radius"))))
+						.toString();
+				}
+			}else if(map.get("type").equalsIgnoreCase("rectangle")) {
+				if (map.containsKey("width") && map.containsKey("height")) {
+					return new StringBuilder("Area of a ")
+							.append(map.get("width")).append("x")
+							.append(map.get("height"))
+							.append(" rectangle is "+CalculateArea(Double.parseDouble(map.get("width")),Double.parseDouble(map.get("height"))))
+							.toString();
+				}
+			}
+		}
+		return "Invalid";
+	}
+	
 	@GetMapping("/math/volume/{l}/{w}/{h}")
 	public String volumeDisplay(
 			@PathVariable(value="l") String length,
