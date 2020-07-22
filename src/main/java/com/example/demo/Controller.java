@@ -1,8 +1,10 @@
 package com.example.demo;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +20,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.imageio.ImageIO;
 import javax.websocket.server.PathParam;
@@ -38,6 +41,27 @@ public class Controller {
 	@PostMapping("")
 	public Data _2(@RequestBody Data data){
 		return database.save(data);
+	}
+	@GetMapping("/data/{id}")
+	public Optional<Data> _3(@PathVariable Long id) {
+		return database.findById(id);
+	}
+	@PutMapping("/data/{id}")
+	public Object _5(@PathVariable Long id,@RequestBody Data data) {
+		if (database.existsById(id)) {
+			return database.save(data);
+		} else {
+			return "ID "+id+" does not exist!";
+		}
+	}
+	@DeleteMapping("/data/{id}")
+	public String _4(@PathVariable Long id) {
+		if (database.existsById(id)) {
+			database.deleteById(id);
+			return "Removed ID "+id+" from database.";
+		} else {
+			return "ID "+id+" does not exist!";
+		}
 	}
 	
 	public static void downloadFileFromUrl(String url, String file) throws IOException{

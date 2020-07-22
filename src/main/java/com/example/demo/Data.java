@@ -10,9 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Entity
 @Table(name="data")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Data {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
