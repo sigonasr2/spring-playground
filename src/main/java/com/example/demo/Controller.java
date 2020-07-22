@@ -3,6 +3,7 @@ package com.example.demo;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +24,21 @@ import javax.websocket.server.PathParam;
 
 @RestController
 public class Controller {
+	
+	DataRepository database;
+	
+	public Controller(DataRepository database) {
+		this.database=database;
+	}
+	
+	@GetMapping("")
+	public Iterable<Data> _1(){
+		return database.findAll();
+	}
+	@PostMapping("")
+	public Data _2(@RequestBody Data data){
+		return database.save(data);
+	}
 	
 	public static void downloadFileFromUrl(String url, String file) throws IOException{
 		  File filer = new File(file);
