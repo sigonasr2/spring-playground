@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,7 +22,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -62,6 +67,15 @@ public class Controller {
 		} else {
 			return "ID "+id+" does not exist!";
 		}
+	}
+	@GetMapping("/lessons/find/{name}")
+	public Data _7(@PathVariable String name) {
+		return database.findByName(name);
+	}
+	@GetMapping("/lessons/between")
+	public List<Data> _8(@DateTimeFormat(pattern = "MM-dd-yyyy")@RequestParam("date1") Date date1,
+			@DateTimeFormat(pattern = "MM-dd-yyyy")@RequestParam("date2") Date date2) {
+		return database.findBysubmittedOnBetween(date1, date2);
 	}
 	@DeleteMapping("/data/{id}")
 	public String _4(@PathVariable Long id) {
