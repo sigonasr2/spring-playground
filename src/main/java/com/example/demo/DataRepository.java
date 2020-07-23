@@ -7,5 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface DataRepository extends CrudRepository<Data,Long>{
 	Data findByName(String name);
-	List<Data> findBysubmittedOnBetween(Date date1,Date date2);
+	List<Data> submittedOnBetween(Date date1,Date date2);
 }

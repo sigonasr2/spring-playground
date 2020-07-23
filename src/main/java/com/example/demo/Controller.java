@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -31,13 +33,22 @@ import java.util.Optional;
 import javax.imageio.ImageIO;
 import javax.websocket.server.PathParam;
 
+@Service
 @RestController
 public class Controller {
 	
 	DataRepository database;
+	RestTemplate connection = new RestTemplate();
 	
 	public Controller(DataRepository database) {
 		this.database=database;
+	}
+	
+	@GetMapping("/movies")
+	public List<Movie> _8(@RequestParam("q") String q) {
+		System.out.println(connection.getForObject("http://www.omdbapi.com/?apikey={key}&s={title}", String.class, "6ba5969a",q));
+		MovieRequest mr = connection.getForObject("http://www.omdbapi.com/?apikey={key}&s={title}", MovieRequest.class, "6ba5969a",q);
+		return mr.movies;
 	}
 	
 	@GetMapping("")
@@ -49,8 +60,8 @@ public class Controller {
 		return database.save(data);
 	}
 	@GetMapping("/data/{id}")
-	public Optional<Data> _3(@PathVariable Long id) {
-		return database.findById(id);
+	public Data _3(@PathVariable Long id) {
+		return database.findById(id).orElse(new Data());
 	}
 	@PutMapping("/data/{id}")
 	public Object _5(@PathVariable Long id,@RequestBody Data data) {
@@ -75,7 +86,7 @@ public class Controller {
 	@GetMapping("/lessons/between")
 	public List<Data> _8(@DateTimeFormat(pattern = "MM-dd-yyyy")@RequestParam("date1") Date date1,
 			@DateTimeFormat(pattern = "MM-dd-yyyy")@RequestParam("date2") Date date2) {
-		return database.findBysubmittedOnBetween(date1, date2);
+		return database.submittedOnBetween(date1, date2);
 	}
 	@DeleteMapping("/data/{id}")
 	public String _4(@PathVariable Long id) {
